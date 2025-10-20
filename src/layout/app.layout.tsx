@@ -5,8 +5,13 @@ import Asidebar from "@/components/asidebar/asidebar";
 import Header from "@/components/header";
 import CreateWorkspaceDialog from "@/components/workspace/create-workspace-dialog";
 import CreateProjectDialog from "@/components/workspace/project/create-project-dialog";
+import useWorkspaceId from "@/hooks/use-workspace-id";
+import useWorkspaceEvents from "@/hooks/use-workspace-events";
 
 const AppLayout = () => {
+  const workspaceId = useWorkspaceId();
+  useWorkspaceEvents(workspaceId);
+
   return (
     <AuthProvider>
       <SidebarProvider>

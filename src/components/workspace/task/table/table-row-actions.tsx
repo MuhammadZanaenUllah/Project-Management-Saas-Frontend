@@ -17,13 +17,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { deleteTaskMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
+import EditTaskDialog from "../edit-task-dialog";
 
 interface DataTableRowActionsProps {
   row: Row<TaskType>;
+  projectId?: string;
 }
 
-export function DataTableRowActions({ row }: DataTableRowActionsProps) {
+export function DataTableRowActions({ row, projectId }: DataTableRowActionsProps) {
   const [openDeleteDialog, setOpenDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
 
@@ -76,7 +79,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem className="cursor-pointer" onClick={() => setOpenEditDialog(true)}>
             Edit Task
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -100,6 +103,15 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         confirmText="Delete"
         cancelText="Cancel"
       />
+
+      {openEditDialog && (
+        <EditTaskDialog
+          isOpen={openEditDialog}
+          onOpenChange={setOpenEditDialog}
+          task={row.original}
+          projectId={projectId}
+        />
+      )}
     </>
   );
 }
